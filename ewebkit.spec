@@ -91,6 +91,11 @@ Pliki nagłówkowe biblioteki WebKit-EFL.
 %setup -q -n webkit-efl-svn-%{subver}
 
 %build
+# replace -g2 with -g1 to not run into 4 GB ar format limit
+# https://bugs.webkit.org/show_bug.cgi?id=91154
+# http://sourceware.org/bugzilla/show_bug.cgi?id=14625
+CFLAGS="%(echo %{rpmcflags} | sed 's/ -g2/ -g1/g')"
+CXXFLAGS="%(echo %{rpmcxxflags} | sed 's/ -g2/ -g1/g')"
 %cmake . \
 	-DPORT=Efl
 %{__make}
