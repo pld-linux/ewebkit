@@ -1,0 +1,11 @@
+--- webkit-efl-svn-r127150/Source/WebKit/PlatformEfl.cmake.orig	2012-08-30 20:44:46.000000000 +0200
++++ webkit-efl-svn-r127150/Source/WebKit/PlatformEfl.cmake	2012-10-02 19:40:49.854024999 +0200
+@@ -251,7 +251,7 @@
+     ${CMAKE_BINARY_DIR}/WebKit/efl/ewebkit.pc
+     @ONLY)
+ INSTALL(FILES ${CMAKE_BINARY_DIR}/WebKit/efl/ewebkit.pc
+-    DESTINATION lib/pkgconfig)
++    DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+ 
+ UNSET(LIBS_PRIVATE)
+ 
