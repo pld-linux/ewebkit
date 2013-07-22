@@ -3,12 +3,13 @@ Summary(pl.UTF-8):	WebKit-EFL - silnik WWW dla aplikacji EFL
 Name:		ewebkit
 Version:	0
 %define	subver	r127150
-Release:	0.%{subver}.1
+Release:	0.%{subver}.2
 License:	BSD
 Group:		Libraries
 Source0:	http://packages.profusion.mobi/webkit-efl/webkit-efl-svn-%{subver}.tar.bz2
 # Source0-md5:	54332bd571a23d44e32837f4fa3a1c76
 Patch0:		%{name}-lib.patch
+Patch1:		%{name}-harfbuzz-icu.patch
 URL:		http://trac.enlightenment.org/e/wiki/EWebKit
 BuildRequires:	bison
 BuildRequires:	cairo-devel >= 1.10
@@ -91,6 +92,7 @@ Pliki nagłówkowe biblioteki WebKit-EFL.
 %prep
 %setup -q -n webkit-efl-svn-%{subver}
 %patch0 -p1
+%patch1 -p1
 
 %build
 # replace -g2 with -g1 to not run into 4 GB ar format limit
