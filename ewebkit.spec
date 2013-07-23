@@ -10,6 +10,7 @@ Source0:	http://packages.profusion.mobi/webkit-efl/webkit-efl-svn-%{subver}.tar.
 # Source0-md5:	54332bd571a23d44e32837f4fa3a1c76
 Patch0:		%{name}-lib.patch
 Patch1:		%{name}-harfbuzz-icu.patch
+Patch2:		%{name}-gcc.patch
 URL:		http://trac.enlightenment.org/e/wiki/EWebKit
 BuildRequires:	bison
 BuildRequires:	cairo-devel >= 1.10
@@ -93,6 +94,7 @@ Pliki nagłówkowe biblioteki WebKit-EFL.
 %setup -q -n webkit-efl-svn-%{subver}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # replace -g2 with -g1 to not run into 4 GB ar format limit
