@@ -1,0 +1,15 @@
+Fix "array subscript is above array bounds [-Werror=array-bounds]"
+--- WebKit/Source/WTF/wtf/dtoa/double-conversion.cc.orig	2013-12-08 18:29:09.000000000 +0100
++++ WebKit/Source/WTF/wtf/dtoa/double-conversion.cc	2013-12-11 16:47:53.187599375 +0100
+@@ -444,9 +444,9 @@
+         if (current == end) return 0.0;
+         
+         // The longest form of simplified number is: "-<significant digits>.1eXXX\0".
+-        const int kBufferSize = kMaxSignificantDigits + 10;
++        const size_t kBufferSize = kMaxSignificantDigits + 10;
+         char buffer[kBufferSize];  // NOLINT: size is known at compile time.
+-        int buffer_pos = 0;
++        size_t buffer_pos = 0;
+         
+         // Exponent will be adjusted if insignificant digits of the integer part
+         // or insignificant leading zeros of the fractional part are dropped.

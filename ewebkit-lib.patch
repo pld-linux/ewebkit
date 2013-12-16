@@ -1,11 +1,11 @@
---- webkit-efl-svn-r127150/Source/WebKit/PlatformEfl.cmake.orig	2012-08-30 20:44:46.000000000 +0200
-+++ webkit-efl-svn-r127150/Source/WebKit/PlatformEfl.cmake	2012-10-02 19:40:49.854024999 +0200
-@@ -251,7 +251,7 @@
-     ${CMAKE_BINARY_DIR}/WebKit/efl/ewebkit.pc
-     @ONLY)
- INSTALL(FILES ${CMAKE_BINARY_DIR}/WebKit/efl/ewebkit.pc
--    DESTINATION lib/pkgconfig)
-+    DESTINATION lib${LIB_SUFFIX}/pkgconfig)
- 
- UNSET(LIBS_PRIVATE)
- 
+--- WebKit/Source/WebKit/PlatformEfl.cmake.orig	2013-12-09 21:45:22.604102036 +0100
++++ WebKit/Source/WebKit/PlatformEfl.cmake	2013-12-09 21:48:03.260761960 +0100
+@@ -189,7 +189,7 @@
+ configure_file(efl/ewebkit.pc.in ${CMAKE_BINARY_DIR}/WebKit/efl/ewebkit.pc @ONLY)
+ configure_file(efl/EWebKitConfig.cmake.in ${CMAKE_BINARY_DIR}/WebKit/efl/EWebKitConfig.cmake @ONLY)
+ configure_file(efl/EWebKitConfigVersion.cmake.in ${CMAKE_BINARY_DIR}/WebKit/efl/EWebKitConfigVersion.cmake @ONLY)
+-install(FILES ${CMAKE_BINARY_DIR}/WebKit/efl/ewebkit.pc DESTINATION lib/pkgconfig)
++install(FILES ${CMAKE_BINARY_DIR}/WebKit/efl/ewebkit.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+ install(FILES
+         ${CMAKE_BINARY_DIR}/WebKit/efl/EWebKitConfig.cmake
+         ${CMAKE_BINARY_DIR}/WebKit/efl/EWebKitConfigVersion.cmake
