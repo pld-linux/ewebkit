@@ -8,6 +8,8 @@ License:	BSD
 Group:		Libraries
 # older snapshots:
 #Source0:	http://packages.profusion.mobi/webkit-efl/webkit-efl-svn-%{subver}.tar.bz2
+# official releases, check for more recent sources:
+#Source0:	http://download.enlightenment.org/rel/libs/webkit-efl/webkit-efl-159807.tar.xz
 # svn checkout https://svn.webkit.org/repository/webkit/trunk WebKit
 # tar cJf webkit-r160591.tar.xz --exclude=.svn --exclude=LayoutTests --exclude=ManualTests --exclude=PerformanceTests --exclude=WebKitLibraries --exclude=Websites WebKit
 Source0:	webkit-%{subver}.tar.xz
