@@ -1,21 +1,26 @@
+#
+# Conditional build:
+%bcond_without	elementary	# MiniBrowser build (needs Elementary)
+#
+%define		efl_ver	1.8
 Summary:	WebKit-EFL - Web content engine for EFL applications
 Summary(pl.UTF-8):	WebKit-EFL - silnik WWW dla aplikacji EFL
 Name:		ewebkit
+# cmake-generated .pc files say 0.1.0, autotools Version.m4 says 2.3.4 ???
 Version:	0.1.0
-%define	subver	r160591
+%define	svnrev	164189
+%define	subver	r%{svnrev}
 Release:	0.%{subver}.1
 License:	BSD
 Group:		Libraries
-# older snapshots:
-#Source0:	http://packages.profusion.mobi/webkit-efl/webkit-efl-svn-%{subver}.tar.bz2
-# official releases, check for more recent sources:
-#Source0:	http://download.enlightenment.org/rel/libs/webkit-efl/webkit-efl-159807.tar.xz
 # svn checkout https://svn.webkit.org/repository/webkit/trunk WebKit
 # tar cJf webkit-r160591.tar.xz --exclude=.svn --exclude=LayoutTests --exclude=ManualTests --exclude=PerformanceTests --exclude=WebKitLibraries --exclude=Websites WebKit
-Source0:	webkit-%{subver}.tar.xz
-# Source0-md5:	b450c3c4030062571c3c05eea3cf4f30
+#Source0:	webkit-%{subver}.tar.xz
+# official snapshots
+Source0:	http://download.enlightenment.org/rel/libs/webkit-efl/webkit-efl-%{svnrev}.tar.xz
+# Source0-md5:	731513fc042ec8e03840bc1ab6a66771
 Patch0:		%{name}-lib.patch
-Patch1:		%{name}-bounds.patch
+Patch1:		%{name}-werror.patch
 Patch2:		%{name}-include.patch
 Patch3:		%{name}-build.patch
 URL:		http://trac.enlightenment.org/e/wiki/EWebKit
@@ -26,21 +31,22 @@ BuildRequires:	cairo-devel >= 1.10.2
 BuildRequires:	cmake >= 2.8.3
 BuildRequires:	dbus-devel
 BuildRequires:	e_dbus-devel >= 1.7
-BuildRequires:	ecore-devel >= 1.8
-BuildRequires:	ecore-evas-devel >= 1.8
-BuildRequires:	ecore-file-devel >= 1.8
-BuildRequires:	ecore-imf-devel >= 1.8
-BuildRequires:	ecore-imf-evas-devel >= 1.8
-BuildRequires:	ecore-input-devel >= 1.8
-BuildRequires:	ecore-x-devel >= 1.8
-BuildRequires:	edje >= 1.8
-BuildRequires:	edje-devel >= 1.8
-BuildRequires:	eet-devel >= 1.8
-BuildRequires:	eeze-devel >= 1.8
-BuildRequires:	efreet-devel >= 1.8
-BuildRequires:	eina-devel >= 1.8
-BuildRequires:	eo-devel >= 1.8
-BuildRequires:	evas-devel >= 1.8
+BuildRequires:	ecore-devel >= %{efl_ver}
+BuildRequires:	ecore-evas-devel >= %{efl_ver}
+BuildRequires:	ecore-file-devel >= %{efl_ver}
+BuildRequires:	ecore-imf-devel >= %{efl_ver}
+BuildRequires:	ecore-imf-evas-devel >= %{efl_ver}
+BuildRequires:	ecore-input-devel >= %{efl_ver}
+BuildRequires:	ecore-x-devel >= %{efl_ver}
+BuildRequires:	edje >= %{efl_ver}
+BuildRequires:	edje-devel >= %{efl_ver}
+BuildRequires:	eet-devel >= %{efl_ver}
+BuildRequires:	eeze-devel >= %{efl_ver}
+BuildRequires:	efreet-devel >= %{efl_ver}
+BuildRequires:	eina-devel >= %{efl_ver}
+%{?with_elementary:BuildRequires:	elementary-devel >= %{efl_ver}}
+BuildRequires:	eo-devel >= %{efl_ver}
+BuildRequires:	evas-devel >= %{efl_ver}
 BuildRequires:	flex >= 2.5.34
 BuildRequires:	fontconfig-devel >= 2.8.0
 BuildRequires:	freetype-devel >= 1:2.4.2
@@ -65,21 +71,22 @@ BuildRequires:	ruby >= 1.8.7
 BuildRequires:	sqlite3-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
+%{!?with_elementary:BuildConflicts:	elementary-devel}
 Requires:	atk >= 1:2.10.0
 Requires:	cairo >= 1.10.2
 Requires:	e_dbus >= 1.7
-Requires:	ecore >= 1.8
-Requires:	ecore-evas >= 1.8
-Requires:	ecore-file >= 1.8
-Requires:	ecore-imf >= 1.8
-Requires:	ecore-imf-evas >= 1.8
-Requires:	ecore-input >= 1.8
-Requires:	ecore-x >= 1.8
-Requires:	edje-libs >= 1.8
-Requires:	efreet >= 1.8
-Requires:	eeze >= 1.8
-Requires:	eina >= 1.8
-Requires:	evas >= 1.8
+Requires:	ecore >= %{efl_ver}
+Requires:	ecore-evas >= %{efl_ver}
+Requires:	ecore-file >= %{efl_ver}
+Requires:	ecore-imf >= %{efl_ver}
+Requires:	ecore-imf-evas >= %{efl_ver}
+Requires:	ecore-input >= %{efl_ver}
+Requires:	ecore-x >= %{efl_ver}
+Requires:	edje-libs >= %{efl_ver}
+Requires:	efreet >= %{efl_ver}
+Requires:	eeze >= %{efl_ver}
+Requires:	eina >= %{efl_ver}
+Requires:	evas >= %{efl_ver}
 Requires:	fontconfig-libs >= 2.8.0
 Requires:	freetype >= 2.1.0
 Requires:	glib2 >= 1:2.36.0
@@ -90,6 +97,9 @@ Requires:	harfbuzz-icu >= 0.9.18
 Requires:	libxml2 >= 1:2.8.0
 Requires:	libxslt >= 1.1.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# __once_call, __once_called non-function symbols from libstdc++
+%define		skip_post_check_so	libewebkit.*
 
 %description
 WebKit-EFL - Web content engine for EFL applications.
@@ -117,7 +127,7 @@ Header files for WebKit-EFL library.
 Pliki nagłówkowe biblioteki WebKit-EFL.
 
 %prep
-%setup -q -n WebKit
+%setup -q -n efl-webkit
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1

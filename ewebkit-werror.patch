@@ -1,0 +1,13 @@
+--- efl-webkit/Source/JavaScriptCore/bytecode/UnlinkedCodeBlock.cpp.orig	2014-02-14 12:38:19.000000000 +0100
++++ efl-webkit/Source/JavaScriptCore/bytecode/UnlinkedCodeBlock.cpp	2014-03-19 20:23:11.401525259 +0100
+@@ -307,8 +307,8 @@
+     dataLogF("UnlinkedCodeBlock %p expressionRangeInfo[%zu] {\n", this, size);
+     for (size_t i = 0; i < size; i++) {
+         ExpressionRangeInfo& info = expressionInfo[i];
+-        unsigned line;
+-        unsigned column;
++        unsigned line = 0;
++        unsigned column = 0;
+         getLineAndColumn(info, line, column);
+         dumpLineColumnEntry(i, instructions(), info.instructionOffset, line, column);
+     }

@@ -1,10 +1,20 @@
---- WebKit/Source/JavaScriptCore/runtime/ButterflyInlines.h.orig	2013-12-08 18:21:26.000000000 +0100
-+++ WebKit/Source/JavaScriptCore/runtime/ButterflyInlines.h	2013-12-13 15:27:08.577217622 +0100
+--- efl-webkit/Source/JavaScriptCore/llint/LLIntEntrypoint.cpp.orig	2014-02-02 05:21:06.000000000 +0100
++++ efl-webkit/Source/JavaScriptCore/llint/LLIntEntrypoint.cpp	2014-03-20 19:38:55.531344185 +0100
 @@ -30,6 +30,7 @@
- #include "Butterfly.h"
- #include "CopiedSpaceInlines.h"
- #include "CopyVisitor.h"
-+#include "IndexingHeaderInlines.h"
- #include "VM.h"
- #include "Structure.h"
+ 
+ #include "CodeBlock.h"
+ #include "JITCode.h"
++#include "JSCellInlines.h"
+ #include "JSObject.h"
+ #include "LLIntThunks.h"
+ #include "LowLevelInterpreter.h"
+--- efl-webkit/Source/JavaScriptCore/runtime/FunctionExecutableDump.cpp.orig	2013-09-04 10:53:58.000000000 +0200
++++ efl-webkit/Source/JavaScriptCore/runtime/FunctionExecutableDump.cpp	2014-03-20 19:38:38.831344886 +0100
+@@ -25,6 +25,7 @@
+ 
+ #include "config.h"
+ #include "FunctionExecutableDump.h"
++#include "JSCellInlines.h"
+ 
+ #include "CodeBlock.h"
  
