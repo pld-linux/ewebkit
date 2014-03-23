@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without	elementary	# MiniBrowser build (needs Elementary)
+%bcond_with	elementary	# MiniBrowser build (needs Elementary); not installed anyway
 #
 %define		efl_ver	1.8
 Summary:	WebKit-EFL - Web content engine for EFL applications
@@ -45,6 +45,7 @@ BuildRequires:	eeze-devel >= %{efl_ver}
 BuildRequires:	efreet-devel >= %{efl_ver}
 BuildRequires:	eina-devel >= %{efl_ver}
 %{?with_elementary:BuildRequires:	elementary-devel >= %{efl_ver}}
+BuildRequires:	enchant-devel
 BuildRequires:	eo-devel >= %{efl_ver}
 BuildRequires:	evas-devel >= %{efl_ver}
 BuildRequires:	flex >= 2.5.34
@@ -71,7 +72,6 @@ BuildRequires:	ruby >= 1.8.7
 BuildRequires:	sqlite3-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
-%{!?with_elementary:BuildConflicts:	elementary-devel}
 Requires:	atk >= 1:2.10.0
 Requires:	cairo >= 1.10.2
 Requires:	e_dbus >= 1.7
