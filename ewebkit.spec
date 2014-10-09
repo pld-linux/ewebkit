@@ -3,6 +3,7 @@
 %bcond_with	elementary	# MiniBrowser build (needs Elementary); not installed anyway
 #
 %define		efl_ver	1.8
+%define		rel 2
 Summary:	WebKit-EFL - Web content engine for EFL applications
 Summary(pl.UTF-8):	WebKit-EFL - silnik WWW dla aplikacji EFL
 Name:		ewebkit
@@ -10,7 +11,7 @@ Name:		ewebkit
 Version:	0.1.0
 %define	svnrev	164189
 %define	subver	r%{svnrev}
-Release:	0.%{subver}.1
+Release:	0.%{subver}.%{rel}
 License:	BSD
 Group:		Libraries
 # svn checkout https://svn.webkit.org/repository/webkit/trunk WebKit
