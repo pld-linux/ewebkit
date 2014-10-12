@@ -3,7 +3,7 @@ Summary(pl.UTF-8):	WebKit-EFL - silnik WWW dla aplikacji EFL
 Name:		ewebkit
 Version:	0
 %define	subver	r127150
-Release:	0.%{subver}.4
+Release:	0.%{subver}.5
 License:	BSD
 Group:		Libraries
 Source0:	http://packages.profusion.mobi/webkit-efl/webkit-efl-svn-%{subver}.tar.bz2
