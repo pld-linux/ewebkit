@@ -11,3 +11,14 @@
          getLineAndColumn(info, line, column);
          dumpLineColumnEntry(i, instructions(), info.instructionOffset, line, column);
      }
+--- efl-webkit/Source/cmake/WebKitHelpers.cmake.orig	2013-12-27 11:25:36.000000000 +0100
++++ efl-webkit/Source/cmake/WebKitHelpers.cmake	2015-10-09 21:45:01.022925646 +0200
+@@ -44,7 +44,7 @@
+ 
+         # Enable errors on warning
+         if (OPTION_ENABLE_WERROR)
+-            set(OLD_COMPILE_FLAGS "-Werror -Wno-error=unused-parameter ${OLD_COMPILE_FLAGS}")
++            set(OLD_COMPILE_FLAGS "-Werror -Wno-error=unused-parameter -Wno-error=uninitialized -Wno-error=parentheses ${OLD_COMPILE_FLAGS}")
+         endif ()
+ 
+         set_target_properties(${_target} PROPERTIES

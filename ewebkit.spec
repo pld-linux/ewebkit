@@ -24,6 +24,7 @@ Patch0:		%{name}-lib.patch
 Patch1:		%{name}-werror.patch
 Patch2:		%{name}-include.patch
 Patch3:		%{name}-build.patch
+Patch4:		%{name}-x32.patch
 URL:		http://trac.enlightenment.org/e/wiki/EWebKit
 BuildRequires:	OpenGL-devel
 BuildRequires:	atk-devel >= 1:2.10.0
@@ -133,6 +134,7 @@ Pliki nagłówkowe biblioteki WebKit-EFL.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 # replace -g2 with -g1 to not run into 4 GB ar format limit
@@ -141,6 +143,9 @@ Pliki nagłówkowe biblioteki WebKit-EFL.
 CFLAGS="%(echo %{rpmcflags} | sed 's/ -g2/ -g1/g')"
 CXXFLAGS="%(echo %{rpmcxxflags} | sed 's/ -g2/ -g1/g') -Wno-deprecated-declarations"
 %cmake . \
+%ifarch x32
+	-DENABLE_JIT=OFF \
+%endif
 	-DPORT=Efl
 %{__make}
 
