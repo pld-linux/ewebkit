@@ -25,6 +25,8 @@ Patch1:		%{name}-werror.patch
 Patch2:		%{name}-include.patch
 Patch3:		%{name}-build.patch
 Patch4:		%{name}-x32.patch
+Patch5:		%{name}-glib.patch
+Patch6:		%{name}-link.patch
 URL:		http://trac.enlightenment.org/e/wiki/EWebKit
 BuildRequires:	OpenGL-devel
 BuildRequires:	atk-devel >= 1:2.10.0
@@ -135,6 +137,8 @@ Pliki nagłówkowe biblioteki WebKit-EFL.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 # replace -g2 with -g1 to not run into 4 GB ar format limit

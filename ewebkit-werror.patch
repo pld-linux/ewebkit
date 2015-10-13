@@ -18,7 +18,38 @@
          # Enable errors on warning
          if (OPTION_ENABLE_WERROR)
 -            set(OLD_COMPILE_FLAGS "-Werror -Wno-error=unused-parameter ${OLD_COMPILE_FLAGS}")
-+            set(OLD_COMPILE_FLAGS "-Werror -Wno-error=unused-parameter -Wno-error=uninitialized -Wno-error=parentheses ${OLD_COMPILE_FLAGS}")
++            set(OLD_COMPILE_FLAGS "-Werror -Wno-error=unused-parameter -Wno-error=uninitialized ${OLD_COMPILE_FLAGS}")
          endif ()
  
          set_target_properties(${_target} PROPERTIES
+--- efl-webkit/Source/WTF/wtf/SaturatedArithmetic.h.orig	2015-10-11 21:58:21.340594067 +0200
++++ efl-webkit/Source/WTF/wtf/SaturatedArithmetic.h	2015-10-11 21:59:56.195516793 +0200
+@@ -43,7 +43,7 @@
+ 
+     // Can only overflow if the signed bit of the two values match. If the signed
+     // bit of the result and one of the values differ it did overflow.
+-    if (!((ua ^ ub) >> 31) & (result ^ ua) >> 31)
++    if (!((ua ^ ub) >> 31) && (result ^ ua) >> 31)
+         result = std::numeric_limits<int>::max() + (ua >> 31);
+ 
+     return result;
+@@ -57,7 +57,7 @@
+ 
+     // Can only overflow if the signed bit of the two values do not match. If the
+     // signed bit of the result and the first value differ it did overflow.
+-    if ((ua ^ ub) >> 31 & (result ^ ua) >> 31)
++    if ((ua ^ ub) >> 31 && (result ^ ua) >> 31)
+         result = std::numeric_limits<int>::max() + (ua >> 31);
+ 
+     return result;
+--- efl-webkit/Source/WebCore/platform/audio/MediaSessionManager.cpp.orig	2014-02-08 13:36:06.000000000 +0100
++++ efl-webkit/Source/WebCore/platform/audio/MediaSessionManager.cpp	2015-10-12 18:06:33.023265872 +0200
+@@ -136,7 +136,7 @@
+ {
+     MediaSession::MediaType sessionType = session.mediaType();
+     SessionRestrictions restrictions = m_restrictions[sessionType];
+-    if (!restrictions & ConcurrentPlaybackNotPermitted)
++    if (!(restrictions & ConcurrentPlaybackNotPermitted))
+         return;
+ 
+     for (auto* oneSession : m_sessions) {
