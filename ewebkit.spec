@@ -27,6 +27,7 @@ Patch3:		%{name}-build.patch
 Patch4:		%{name}-x32.patch
 Patch5:		%{name}-glib.patch
 Patch6:		%{name}-link.patch
+Patch7:		gstreamer-headers.patch
 URL:		http://trac.enlightenment.org/e/wiki/EWebKit
 BuildRequires:	OpenGL-devel
 BuildRequires:	atk-devel >= 1:2.10.0
@@ -139,6 +140,7 @@ Pliki nagłówkowe biblioteki WebKit-EFL.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 # replace -g2 with -g1 to not run into 4 GB ar format limit
