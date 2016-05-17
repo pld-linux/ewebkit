@@ -8,9 +8,9 @@ Summary:	WebKit-EFL - Web content engine for EFL applications
 Summary(pl.UTF-8):	WebKit-EFL - silnik WWW dla aplikacji EFL
 Name:		ewebkit
 # cmake-generated .pc files say 0.1.0, autotools Version.m4 says 2.3.4 ???
-Version:	0.1.0
 %define	svnrev	164189
 %define	subver	r%{svnrev}
+Version:	0.1.0
 Release:	0.%{subver}.%{rel}
 License:	BSD
 Group:		Libraries
@@ -33,6 +33,7 @@ BuildRequires:	OpenGL-devel
 BuildRequires:	atk-devel >= 1:2.10.0
 BuildRequires:	bison >= 2.4.1
 BuildRequires:	cairo-devel >= 1.10.2
+BuildRequires:	check-devel
 BuildRequires:	cmake >= 2.8.3
 BuildRequires:	dbus-devel
 BuildRequires:	e_dbus-devel >= 1.7
@@ -88,8 +89,8 @@ Requires:	ecore-imf-evas >= %{efl_ver}
 Requires:	ecore-input >= %{efl_ver}
 Requires:	ecore-x >= %{efl_ver}
 Requires:	edje-libs >= %{efl_ver}
-Requires:	efreet >= %{efl_ver}
 Requires:	eeze >= %{efl_ver}
+Requires:	efreet >= %{efl_ver}
 Requires:	eina >= %{efl_ver}
 Requires:	evas >= %{efl_ver}
 Requires:	fontconfig-libs >= 2.8.0
