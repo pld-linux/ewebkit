@@ -3,7 +3,7 @@
 %bcond_with	elementary	# MiniBrowser build (needs Elementary); not installed anyway
 #
 %define		efl_ver	1.8
-%define		rel 6
+%define		rel 7
 Summary:	WebKit-EFL - Web content engine for EFL applications
 Summary(pl.UTF-8):	WebKit-EFL - silnik WWW dla aplikacji EFL
 Name:		ewebkit
