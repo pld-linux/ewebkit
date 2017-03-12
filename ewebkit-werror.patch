@@ -53,3 +53,225 @@
          return;
  
      for (auto* oneSession : m_sessions) {
+--- efl-webkit/Source/JavaScriptCore/API/OpaqueJSString.h~	2014-01-18 01:08:00.000000000 +0100
++++ efl-webkit/Source/JavaScriptCore/API/OpaqueJSString.h	2017-03-12 17:16:58.206037221 +0100
+@@ -55,10 +55,10 @@
+ 
+     JS_EXPORT_PRIVATE ~OpaqueJSString();
+ 
+-    bool is8Bit() { return this ? m_string.is8Bit() : false; }
+-    const LChar* characters8() { return this ? m_string.characters8() : nullptr; }
+-    const UChar* characters16() { return this ? m_string.characters16() : nullptr; }
+-    unsigned length() { return this ? m_string.length() : 0; }
++    bool is8Bit() { return m_string.is8Bit(); }
++    const LChar* characters8() { return m_string.characters8(); }
++    const UChar* characters16() { return m_string.characters16(); }
++    unsigned length() { return m_string.length(); }
+ 
+     const UChar* characters();
+ 
+--- efl-webkit/Source/JavaScriptCore/API/OpaqueJSString.cpp~	2014-01-29 00:06:49.000000000 +0100
++++ efl-webkit/Source/JavaScriptCore/API/OpaqueJSString.cpp	2017-03-12 17:26:29.911307319 +0100
+@@ -55,16 +55,13 @@
+ 
+ String OpaqueJSString::string() const
+ {
+-    if (!this)
+-        return String();
+-
+     // Return a copy of the wrapped string, because the caller may make it an Identifier.
+     return m_string.isolatedCopy();
+ }
+ 
+ Identifier OpaqueJSString::identifier(VM* vm) const
+ {
+-    if (!this || m_string.isNull())
++    if (m_string.isNull())
+         return Identifier();
+ 
+     if (m_string.isEmpty())
+@@ -78,9 +75,6 @@
+ 
+ const UChar* OpaqueJSString::characters()
+ {
+-    if (!this)
+-        return nullptr;
+-
+     // m_characters is put in a local here to avoid an extra atomic load.
+     UChar* characters = m_characters;
+     if (characters)
+--- efl-webkit/Source/JavaScriptCore/interpreter/CallFrame.h~	2014-02-02 05:21:06.000000000 +0100
++++ efl-webkit/Source/JavaScriptCore/interpreter/CallFrame.h	2017-03-12 17:37:03.749066109 +0100
+@@ -273,7 +273,7 @@
+ 
+         bool isVMEntrySentinel() const
+         {
+-            return !!this && codeBlock() == vmEntrySentinelCodeBlock();
++            return codeBlock() == vmEntrySentinelCodeBlock();
+         }
+ 
+         CallFrame* vmEntrySentinelCallerFrame() const
+diff -ur efl-webkit/Source/JavaScriptCore/dfg/DFGSpeculativeJIT.cpp efl-webkit-werror/Source/JavaScriptCore/dfg/DFGSpeculativeJIT.cpp
+--- efl-webkit/Source/JavaScriptCore/dfg/DFGSpeculativeJIT.cpp	2014-02-14 12:38:19.000000000 +0100
++++ efl-webkit-werror/Source/JavaScriptCore/dfg/DFGSpeculativeJIT.cpp	2017-03-12 17:56:05.790064068 +0100
+@@ -373,6 +373,7 @@
+         if (node->hasConstant()) {
+             if (valueOfJSConstant(node).isCell())
+                 fillAction = SetTrustedJSConstant;
++            else
+                 fillAction = SetJSConstant;
+         } else if (info.spillFormat() == DataFormatInt32) {
+             ASSERT(registerFormat == DataFormatJSInt32);
+diff -ur efl-webkit/Source/JavaScriptCore/parser/SourceProvider.h efl-webkit-werror/Source/JavaScriptCore/parser/SourceProvider.h
+--- efl-webkit/Source/JavaScriptCore/parser/SourceProvider.h	2014-01-18 01:08:00.000000000 +0100
++++ efl-webkit-werror/Source/JavaScriptCore/parser/SourceProvider.h	2017-03-12 17:40:14.070962357 +0100
+@@ -54,9 +54,6 @@
+         TextPosition startPosition() const { return m_startPosition; }
+         intptr_t asID()
+         {
+-            ASSERT(this);
+-            if (!this) // Be defensive in release mode.
+-                return nullID;
+             if (!m_id)
+                 getID();
+             return m_id;
+diff -ur efl-webkit/Source/JavaScriptCore/runtime/Identifier.cpp efl-webkit-werror/Source/JavaScriptCore/runtime/Identifier.cpp
+--- efl-webkit/Source/JavaScriptCore/runtime/Identifier.cpp	2014-02-14 12:38:19.000000000 +0100
++++ efl-webkit-werror/Source/JavaScriptCore/runtime/Identifier.cpp	2017-03-12 18:04:59.046962327 +0100
+@@ -143,8 +143,8 @@
+         UChar c = (*r)[0];
+         if (c <= maxSingleCharacterString)
+             r = vm->smallStrings.singleCharacterStringRep(c);
+-            if (r->isIdentifier())
+-                return *r;
++        if (r->isIdentifier())
++            return *r;
+     }
+ 
+     return **vm->identifierTable->add(r).iterator;
+diff -ur efl-webkit/Source/WebCore/dom/Node.h efl-webkit-werror/Source/WebCore/dom/Node.h
+--- efl-webkit/Source/WebCore/dom/Node.h	2014-02-14 12:38:20.000000000 +0100
++++ efl-webkit-werror/Source/WebCore/dom/Node.h	2017-03-12 18:17:51.742599543 +0100
+@@ -381,7 +381,6 @@
+     // A Document node returns itself.
+     Document& document() const
+     {
+-        ASSERT(this);
+         ASSERT(documentInternal());
+         return *documentInternal();
+     }
+diff -ur efl-webkit/Source/WebCore/dom/TreeScope.cpp efl-webkit-werror/Source/WebCore/dom/TreeScope.cpp
+--- efl-webkit/Source/WebCore/dom/TreeScope.cpp	2014-02-15 13:21:43.000000000 +0100
++++ efl-webkit-werror/Source/WebCore/dom/TreeScope.cpp	2017-03-12 18:29:11.456735808 +0100
+@@ -352,7 +352,6 @@
+ 
+ void TreeScope::adoptIfNeeded(Node* node)
+ {
+-    ASSERT(this);
+     ASSERT(node);
+     ASSERT(!node->isDocumentNode());
+     ASSERT(!node->m_deletionHasBegun);
+diff -ur efl-webkit/Source/WebCore/html/HTMLElement.cpp efl-webkit-werror/Source/WebCore/html/HTMLElement.cpp
+--- efl-webkit/Source/WebCore/html/HTMLElement.cpp	2014-02-09 02:25:01.000000000 +0100
++++ efl-webkit-werror/Source/WebCore/html/HTMLElement.cpp	2017-03-12 18:40:22.864691363 +0100
+@@ -534,7 +534,7 @@
+     else
+         newChild = Text::create(document(), text);
+ 
+-    if (!this || !parentNode())
++    if (!parentNode())
+         ec = HIERARCHY_REQUEST_ERR;
+     if (ec)
+         return;
+diff -ur efl-webkit/Source/WebCore/page/Frame.cpp efl-webkit-werror/Source/WebCore/page/Frame.cpp
+--- efl-webkit/Source/WebCore/page/Frame.cpp	2014-02-09 02:25:01.000000000 +0100
++++ efl-webkit-werror/Source/WebCore/page/Frame.cpp	2017-03-12 19:01:07.994763664 +0100
+@@ -890,7 +890,6 @@
+     bool useFixedLayout, ScrollbarMode horizontalScrollbarMode, bool horizontalLock,
+     ScrollbarMode verticalScrollbarMode, bool verticalLock)
+ {
+-    ASSERT(this);
+     ASSERT(m_page);
+ 
+     bool isMainFrame = this->isMainFrame();
+diff -ur efl-webkit/Source/WebCore/page/FrameView.cpp efl-webkit-werror/Source/WebCore/page/FrameView.cpp
+--- efl-webkit/Source/WebCore/page/FrameView.cpp	2014-02-15 13:21:43.000000000 +0100
++++ efl-webkit-werror/Source/WebCore/page/FrameView.cpp	2017-03-12 18:57:46.482762180 +0100
+@@ -1403,7 +1403,7 @@
+     if (printing) {
+         if (m_mediaTypeWhenNotPrinting.isNull())
+             m_mediaTypeWhenNotPrinting = mediaType();
+-            setMediaType("print");
++        setMediaType("print");
+     } else {
+         if (!m_mediaTypeWhenNotPrinting.isNull())
+             setMediaType(m_mediaTypeWhenNotPrinting);
+diff -ur efl-webkit/Source/WebCore/rendering/RenderObject.cpp efl-webkit-werror/Source/WebCore/rendering/RenderObject.cpp
+--- efl-webkit/Source/WebCore/rendering/RenderObject.cpp	2014-02-14 12:38:20.000000000 +0100
++++ efl-webkit-werror/Source/WebCore/rendering/RenderObject.cpp	2017-03-12 19:29:06.414875333 +0100
+@@ -1401,13 +1401,6 @@
+ 
+ void RenderObject::showRenderObject(int printedCharacters) const
+ {
+-    // As this function is intended to be used when debugging, the
+-    // this pointer may be 0.
+-    if (!this) {
+-        fputs("(null)\n", stderr);
+-        return;
+-    }
+-
+     printedCharacters += fprintf(stderr, "%s %p", renderName(), this);
+ 
+     if (node()) {
+@@ -1431,8 +1424,6 @@
+         fputc(' ', stderr);
+ 
+     showRenderObject(printedCharacters);
+-    if (!this)
+-        return;
+ 
+     for (const RenderObject* child = firstChildSlow(); child; child = child->nextSibling())
+         child->showRenderTreeAndMark(markedObject1, markedLabel1, markedObject2, markedLabel2, depth + 1);
+diff -ur efl-webkit/Source/WebKit2/WebProcess/Plugins/Netscape/JSNPObject.cpp efl-webkit-werror/Source/WebKit2/WebProcess/Plugins/Netscape/JSNPObject.cpp
+--- efl-webkit/Source/WebKit2/WebProcess/Plugins/Netscape/JSNPObject.cpp	2014-02-08 13:36:07.000000000 +0100
++++ efl-webkit-werror/Source/WebKit2/WebProcess/Plugins/Netscape/JSNPObject.cpp	2017-03-12 21:09:00.761725052 +0100
+@@ -89,7 +89,6 @@
+ void JSNPObject::invalidate()
+ {
+     ASSERT(m_npObject);
+-    ASSERT_GC_OBJECT_INHERITS(this, info());
+ 
+     releaseNPObject(m_npObject);
+     m_npObject = 0;
+@@ -106,7 +105,6 @@
+ 
+ JSValue JSNPObject::callMethod(ExecState* exec, NPIdentifier methodName)
+ {
+-    ASSERT_GC_OBJECT_INHERITS(this, info());
+     if (!m_npObject)
+         return throwInvalidAccessError(exec);
+ 
+@@ -146,7 +144,6 @@
+ 
+ JSC::JSValue JSNPObject::callObject(JSC::ExecState* exec)
+ {
+-    ASSERT_GC_OBJECT_INHERITS(this, info());
+     if (!m_npObject)
+         return throwInvalidAccessError(exec);
+ 
+@@ -186,7 +183,6 @@
+ 
+ JSValue JSNPObject::callConstructor(ExecState* exec)
+ {
+-    ASSERT_GC_OBJECT_INHERITS(this, info());
+     if (!m_npObject)
+         return throwInvalidAccessError(exec);
+ 
+@@ -340,7 +336,6 @@
+ 
+ bool JSNPObject::deleteProperty(ExecState* exec, NPIdentifier propertyName)
+ {
+-    ASSERT_GC_OBJECT_INHERITS(this, info());
+     if (!m_npObject) {
+         throwInvalidAccessError(exec);
+         return false;
