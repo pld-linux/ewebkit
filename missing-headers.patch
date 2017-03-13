@@ -1,0 +1,25 @@
+2014-06-12  Alberto Garcia  <berto@igalia.com>
+
+        [GTK] fails to build with --disable-webgl --disable-accelerated-compositing
+        https://bugs.webkit.org/show_bug.cgi?id=131267
+
+        Reviewed by NOBODY (OOPS!).
+
+        Add missing headers needed for Float32Array::create().
+
+        * Modules/webaudio/AudioBuffer.cpp:
+
+diff --git a/Source/WebCore/Modules/webaudio/AudioBuffer.cpp b/Source/WebCore/Modules/webaudio/AudioBuffer.cpp
+index d714247..e2ff1c6 100644
+--- a/Source/WebCore/Modules/webaudio/AudioBuffer.cpp
++++ b/Source/WebCore/Modules/webaudio/AudioBuffer.cpp
+@@ -38,6 +38,9 @@
+ #include "ExceptionCode.h"
+ #include "ExceptionCodePlaceholder.h"
+ 
++#include <runtime/JSCInlines.h>
++#include <runtime/TypedArrayInlines.h>
++
+ namespace WebCore {
+ 
+ PassRefPtr<AudioBuffer> AudioBuffer::create(unsigned numberOfChannels, size_t numberOfFrames, float sampleRate)
