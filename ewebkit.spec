@@ -3,7 +3,7 @@
 %bcond_with	elementary	# MiniBrowser build (needs Elementary); not installed anyway
 #
 %define		efl_ver	1.8
-%define		rel 8
+%define		rel 9
 Summary:	WebKit-EFL - Web content engine for EFL applications
 Summary(pl.UTF-8):	WebKit-EFL - silnik WWW dla aplikacji EFL
 Name:		ewebkit
@@ -31,6 +31,7 @@ Patch7:		gstreamer-headers.patch
 Patch8:		cmake-3.4.patch
 Patch9:		cxx.patch
 Patch10:	missing-headers.patch
+Patch11:	icu59.patch
 URL:		http://trac.enlightenment.org/e/wiki/EWebKit
 BuildRequires:	OpenGL-devel
 BuildRequires:	atk-devel >= 1:2.10.0
@@ -148,6 +149,7 @@ Pliki nagłówkowe biblioteki WebKit-EFL.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 # replace -g2 with -g1 to not run into 4 GB ar format limit
